@@ -35,6 +35,16 @@ app.delete("/books/:bookId", async (req, res) => {
   }
 })
 
+// For CORS Error
+const cors = require("cors");
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
 // async function updateBook(title, dataToUpdate) {
 //   try {
 //     const updatedBook = await Book.findOneAndUpdate(
@@ -67,49 +77,74 @@ app.delete("/books/:bookId", async (req, res) => {
 //   }
 // })
 
-// async function getBookByReleaseYear(releaseYear) {
-//   try {
-//     const book = await Book.find({ publishedYear: releaseYear })
-//     return book
-//   } catch (error) {
-//     throw error
-//   }
-// }
+// Get books by author
+async function getBookByAuthor(author) {
+  try {
+    const book = await Book.find({ author: author })
+    return book
+  } catch (error) {
+    throw error
+  }
+}
 
-// app.get("/books/year/:releaseYear", async (req, res) => {
-//   try {
-//     const books = await getBookByReleaseYear(req.params.releaseYear)
-//     if (books.length !== 0) {
-//       res.json(books)
-//     } else {
-//       res.status(404).json({ error: "no books found." })
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: "Failed to Fetch books." })
-//   }
-// })
+app.get("/books/author/:author", async (req, res) => {
+  try {
+    const books = await getBookByAuthor(req.params.author)
+    if (books.length !== 0) {
+      res.json(books)
+    } else {
+      res.status(404).json({ error: "no books found." })
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to Fetch books." })
+  }
+})
 
-// async function getAllBooks() {
-//   try {
-//     const allBooks = await Book.find()
-//     return allBooks
-//   } catch (error) {
-//     throw error
-//   }
-// }
+// Get books by title
+async function getBookByTitle(title) {
+  try {
+    const book = await Book.findOne({ title: title })
+    return book
+  } catch (error) {
+    throw error
+  }
+}
 
-// app.get("/books", async (req, res) => {
-//   try {
-//     const books = await getAllBooks()
-//     if (books.length !== 0) {
-//       res.json({ books: books })
-//     } else {
-//       res.status(404).json({ error: "no book found." })
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: "Failed to Fetch books." })
-//   }
-// })
+app.get("/books/title/:title", async (req, res) => {
+  try {
+    const books = await getBookByTitle(req.params.title)
+    if (books.length !== 0) {
+      res.json(books)
+    } else {
+      res.status(404).json({ error: "no books found." })
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to Fetch books." })
+  }
+})
+
+// Get all books
+async function getAllBooks() {
+  try {
+    const allBooks = await Book.find()
+    return allBooks
+  } catch (error) {
+    throw error
+  }
+}
+
+app.get("/books", async (req, res) => {
+  try {
+    const books = await getAllBooks()
+    if (books.length !== 0) {
+      res.json(books)
+    } else {
+      res.status(404).json({ error: "no book found." })
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to Fetch books." })
+  }
+})
 
 // async function addNewBook(newBook) {
 //   try {
