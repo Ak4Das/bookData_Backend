@@ -6,12 +6,6 @@ connectToDatabase()
 
 const Book = require("./model/book.model")
 
-require("dotenv").config()
-const PORT = process.env.PORT
-app.listen(PORT, () => {
-  console.log("Server is running on ", PORT)
-})
-
 // For CORS Error
 const cors = require("cors");
 const corsOptions = {
@@ -166,4 +160,10 @@ app.post("/addBook", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to add Book" })
   }
+})
+
+require("dotenv").config()
+const PORT = process.env.PORT
+app.listen(PORT, () => {
+  console.log("Server is running on ", PORT)
 })
